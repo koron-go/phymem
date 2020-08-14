@@ -1,3 +1,6 @@
+/*
+Package procstatm provides methods to access contents of /proc/{pid}/statm
+*/
 package procstatm
 
 import (

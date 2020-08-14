@@ -4,7 +4,8 @@
 
 package psapi
 
-type PROCESS_MEMORY_COUNTERS struct {
+// ProcessMemoryCounters has information of process's memory.
+type ProcessMemoryCounters struct {
 	CB                         uint32
 	PageFaultCount             uint32
 	PeakWorkingSetSize         uintptr
@@ -17,4 +18,4 @@ type PROCESS_MEMORY_COUNTERS struct {
 	PeakPagefileUsage          uintptr
 }
 
-//sys	GetProcessMemoryInfo(handle syscall.Handle, memCounters *PROCESS_MEMORY_COUNTERS, cb uint32) (err error) = psapi.GetProcessMemoryInfo
+//sys	GetProcessMemoryInfo(handle syscall.Handle, memCounters *ProcessMemoryCounters, cb uint32) (err error) = psapi.GetProcessMemoryInfo

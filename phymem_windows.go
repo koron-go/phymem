@@ -19,14 +19,14 @@ func Current() (uint, error) {
 	return uint(m.WorkingSetSize), nil
 }
 
-var zeroPMC = psapi.PROCESS_MEMORY_COUNTERS{}
+var zeroPMC = psapi.ProcessMemoryCounters{}
 
-func currentPMC() (psapi.PROCESS_MEMORY_COUNTERS, error) {
+func currentPMC() (psapi.ProcessMemoryCounters, error) {
 	p, err := syscall.GetCurrentProcess()
 	if err != nil {
 		return zeroPMC, err
 	}
-	var m psapi.PROCESS_MEMORY_COUNTERS
+	var m psapi.ProcessMemoryCounters
 	err = psapi.GetProcessMemoryInfo(p, &m, uint32(unsafe.Sizeof(m)))
 	if err != nil {
 		return zeroPMC, err
@@ -48,7 +48,7 @@ type ProcessMemoryCounters struct {
 	PeakPagefileUsage          uint
 }
 
-func toProcessMemoryCounters(src psapi.PROCESS_MEMORY_COUNTERS) ProcessMemoryCounters {
+func toProcessMemoryCounters(src psapi.ProcessMemoryCounters) ProcessMemoryCounters {
 	return ProcessMemoryCounters{
 		PageFaultCount:             src.PageFaultCount,
 		PeakWorkingSetSize:         uint(src.PeakWorkingSetSize),

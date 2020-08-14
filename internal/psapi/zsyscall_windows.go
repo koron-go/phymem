@@ -42,7 +42,7 @@ var (
 	procGetProcessMemoryInfo = modpsapi.NewProc("GetProcessMemoryInfo")
 )
 
-func GetProcessMemoryInfo(handle syscall.Handle, memCounters *PROCESS_MEMORY_COUNTERS, cb uint32) (err error) {
+func GetProcessMemoryInfo(handle syscall.Handle, memCounters *ProcessMemoryCounters, cb uint32) (err error) {
 	r1, _, e1 := syscall.Syscall(procGetProcessMemoryInfo.Addr(), 3, uintptr(handle), uintptr(unsafe.Pointer(memCounters)), uintptr(cb))
 	if r1 == 0 {
 		if e1 != 0 {
