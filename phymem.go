@@ -1,5 +1,6 @@
 // +build !windows
 // +build !linux
+// +build !freebsd
 
 package phymem
 
