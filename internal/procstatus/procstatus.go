@@ -1,4 +1,8 @@
-package phymem
+/*
+Package procstatus provides methods to access contents of /proc/{pid}/status
+for Plan 9.
+*/
+package procstatus
 
 import (
 	"errors"
@@ -9,12 +13,9 @@ import (
 	"strings"
 )
 
-// for test.
-const providedCurrent = true
-
-// Current get physical memory which used by current process.
-func Current() (uint, error) {
-	name := fmt.Sprintf("/proc/%d/status", os.Getpid())
+// GetRSS retrives resident set size (RSS) for a process.
+func GetRSS(pid int) (uint, error) {
+	name := fmt.Sprintf("/proc/%d/status", pid)
 	r, err := os.Open(name)
 	if err != nil {
 		return 0, err
@@ -23,6 +24,8 @@ func Current() (uint, error) {
 	return readMemSize(r)
 }
 
+// readMemSize parses and extracts "amount of memory" (10th entry) from
+// /proc/{pid}/status.
 func readMemSize(r io.Reader) (uint, error) {
 	/*
 	 * proc/<n>/status contains process's status separated by a space.
@@ -39,19 +42,22 @@ func readMemSize(r io.Reader) (uint, error) {
 	 * 11. [11]the base scheduling priority
 	 * 12. [11]the current scheduling priority
 	 */
-	buf := make([]byte, (27+1)*2+(11+1)*10) // +1: a space
+	const nAllFields = (27+1)*2 + (11+1)*10 // +1: a space
+	const xAmountOfMemory = (27+1)*2 + (11+1)*7
+
+	buf := make([]byte, nAllFields)
 	n, err := r.Read(buf)
 	if err != nil {
-		return 0, err
+		return 0, fmt.Errorf("failed to read /proc/{pid}/status: %w", err)
 	}
 	if n != len(buf) {
 		return 0, errors.New("insufficient process status")
 	}
-	p := (27+1)*2 + (11+1)*7
+	p := xAmountOfMemory
 	s := strings.TrimSpace(string(buf[p : p+11]))
 	msize, err := strconv.ParseUint(s, 10, 32)
 	if err != nil {
-		return 0, err
+		return 0, fmt.Errorf("failed to parse 10th field: %w", err)
 	}
 	return uint(msize) * 1024, nil
 }

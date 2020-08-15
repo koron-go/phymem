@@ -1,4 +1,4 @@
-package phymem
+package procstatus
 
 import (
 	"fmt"
@@ -12,10 +12,10 @@ func TestReadMemSize(t *testing.T) {
 	r := strings.NewReader(s)
 	msize, err := readMemSize(r)
 	if err != nil {
-		t.Fatal("readMemSize:", err)
+		t.Fatal(err)
 	}
 	const want = 236 * 1024
 	if msize != want {
-		t.Errorf("readMemSize(%q) = %d; want %d", s, msize, want)
+		t.Errorf("readMemSize failed: want=%d got=%d", want, msize)
 	}
 }
