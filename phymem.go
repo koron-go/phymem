@@ -1,6 +1,7 @@
 // +build !windows
 // +build !linux
 // +build !freebsd
+// +build !plan9
 
 package phymem
 
