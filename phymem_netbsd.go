@@ -4,9 +4,10 @@ package phymem
 #include <stdio.h>
 #include <sys/param.h>
 #include <sys/sysctl.h>
+#include <sys/types.h>
 #include <unistd.h>
 
-static int
+static int64_t
 getRSS(void)
 {
     int ret;
@@ -23,7 +24,7 @@ getRSS(void)
 
     long pagesize = sysconf(_SC_PAGESIZE);
 
-    return kp.p_vm_rssize * pagesize;
+    return (int64_t)(kp.p_vm_rssize * pagesize);
 }
 */
 import "C"
