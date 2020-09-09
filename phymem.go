@@ -2,6 +2,7 @@
 // +build !linux
 // +build !freebsd
 // +build !plan9
+// +build !netbsd
 
 package phymem
 
