@@ -33,10 +33,10 @@ import "fmt"
 // for test.
 const providedCurrent = true
 
-func Current() (uint, error){
-    rss := int(C.getRSS())
-    if rss < 0 {
-        return 0, fmt.Errorf("failed to get RSS via sysctl: %d", rss)
-    }
-    return uint(rss), nil
+func Current() (uint, error) {
+	rss := int(C.getRSS())
+	if rss < 0 {
+		return 0, fmt.Errorf("failed to get RSS via sysctl: %d", rss)
+	}
+	return uint(rss), nil
 }
