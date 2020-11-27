@@ -1,5 +1,6 @@
 // +build !windows
 // +build !linux
+// +build !darwin
 // +build !freebsd
 // +build !plan9
 // +build !netbsd
