@@ -1,9 +1,5 @@
-// +build !windows
-// +build !linux
-// +build !darwin
-// +build !freebsd
-// +build !plan9
-// +build !netbsd
+//go:build !windows && !linux && !darwin && !freebsd && !plan9 && !netbsd
+// +build !windows,!linux,!darwin,!freebsd,!plan9,!netbsd
 
 package phymem
 
