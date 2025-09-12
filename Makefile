@@ -1,10 +1,16 @@
+TEST_PACKAGE ?= ./...
+
 .PHONY: build
 build:
-	go build -gcflags '-e'
+	go build -gcflags '-e' ./...
 
 .PHONY: test
 test:
-	go test ./...
+	go test $(TEST_PACKAGE)
+
+.PHONY: bench
+bench:
+	go test -bench $(TEST_PACKAGE)
 
 .PHONY: tags
 tags:
@@ -13,23 +19,19 @@ tags:
 .PHONY: cover
 cover:
 	mkdir -p tmp
-	go test -coverprofile tmp/_cover.out ./...
+	go test -coverprofile tmp/_cover.out $(TEST_PACKAGE)
 	go tool cover -html tmp/_cover.out -o tmp/cover.html
 
 .PHONY: checkall
-checkall: vet lint staticcheck
+checkall: vet staticcheck
 
 .PHONY: vet
 vet:
-	go vet ./...
-
-.PHONY: lint
-lint:
-	golint ./...
+	go vet $(TEST_PACKAGE)
 
 .PHONY: staticcheck
 staticcheck:
-	staticcheck ./...
+	staticcheck $(TEST_PACKAGE)
 
 .PHONY: clean
 clean:
@@ -37,4 +39,8 @@ clean:
 	rm -f tags
 	rm -f tmp/_cover.out tmp/cover.html
 
+list-upgradable-modules:
+	@go list -m -u -f '{{if .Update}}{{.Path}} {{.Version}} [{{.Update.Version}}]{{end}}' all
+
 # based on: github.com/koron-go/_skeleton/Makefile
+# $Hash:2c1001edc9ca8359f9467af709ea771dcceb3f831f606f1467284aaa$
